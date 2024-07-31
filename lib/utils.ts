@@ -1,7 +1,9 @@
+import { ZodTypeAny } from 'zod';
 /* eslint-disable no-prototype-builtins */
 import { type ClassValue, clsx } from "clsx";
 import qs from "query-string";
 import { twMerge } from "tailwind-merge";
+import { z ,ZodOptional,ZodString} from "zod";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -193,3 +195,29 @@ export const getTransactionStatus = (date: Date) => {
 
   return date > twoDaysAgo ? "Processing" : "Success";
 };
+
+
+
+export const authFormSchema = (type: string) => {
+  if (type === "sign-up") {
+    return z.object({
+      firstName: z.string().min(1, "First Name is required"),
+      lastName: z.string().min(1, "Last Name is required"),
+      address1: z.string().min(1, "Address is required"),
+      city: z.string().min(1, "City is required"),
+      state: z.string().min(1, "State is required"),
+      postalcode: z.string().min(1, "Postal Code is required"),
+      dateofBirth: z.string().min(1, "Date of Birth is required"),
+      ssn: z.string().min(1, "SSN is required"),
+      email: z.string().email("Invalid email address"),
+      password: z.string().min(6, "Password must be at least 6 characters"),
+    });
+  } else {
+    return z.object({
+      email: z.string().email("Invalid email address"),
+      password: z.string().min(6, "Password must be at least 6 characters"),
+    });
+  }
+  
+};
+
